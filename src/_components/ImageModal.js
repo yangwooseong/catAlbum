@@ -11,7 +11,7 @@ export default class ImageModal {
     this.modalWrapper.remove()
   }
 
-  handleCloseEvent() {
+  addHandleCloseEvent() {
     document.addEventListener('onblur', () => this.removeModal())
     document.querySelector('.overlay').addEventListener('click', (e) => {
       if (e.class !== 'modal-image') this.removeModal()
@@ -21,7 +21,7 @@ export default class ImageModal {
     })
   }
 
-  render() {
+  createModalContent() {
     const overlay = document.createElement('div')
     overlay.className = 'overlay'
     const modalContent = document.createElement('section')
@@ -39,6 +39,10 @@ export default class ImageModal {
     modalContent.appendChild(closeButton)
     modalContent.appendChild(modalImage)
 
-    this.handleCloseEvent()
+    this.addHandleCloseEvent()
+  }
+
+  render() {
+    this.createModalContent()
   }
 }
