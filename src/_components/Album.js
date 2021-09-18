@@ -19,15 +19,22 @@ export default class Album {
     this.render()
   }
 
-  async handleIconClick() {
-    this.nav.setPath('')
-    const loader = new Loader(document.querySelector('.mainContainer'))
-    const data = await api.fetchRootDirectory()
-    loader.closeLoader()
-    this.mainContainer.setData(data)
+  async handleIconClick(e) {
+    if (e.target.className === 'home-icon') {
+      this.nav.setPath('root')
+      const loader = new Loader(document.querySelector('.mainContainer'))
+      const data = await api.fetchRootDirectory()
+      loader.closeLoader()
+      this.mainContainer.setData(data)
+    } else if (e.target.className === 'back-icon') {
+      // const directoryPath = document.querySelector('.directory-path')
+      // directoryPath
+      console.log('back icon clicked')
+    }
   }
 
   async getRootImages() {
+    this.nav.setPath('root')
     this.mainContainer = new MainContainer(this.album, [], this.handleClick)
     const loader = new Loader(document.querySelector('.mainContainer'))
     const data = await api.fetchRootDirectory()

@@ -1,30 +1,36 @@
 export default class Nav {
   constructor($target, handleIconClick) {
     const nav = document.createElement('nav')
-    const path = document.createElement('span')
-    const homeIcon = document.querySelector('.home-icon')
     nav.className = 'nav'
-    path.className = 'directory-path'
+
+    const homeIcon = document.querySelector('.home-icon')
     homeIcon.addEventListener('click', handleIconClick)
-    nav.appendChild(path)
     nav.appendChild(homeIcon)
+    const backIcon = document.querySelector('.back-icon')
+    backIcon.addEventListener('click', handleIconClick)
+    nav.appendChild(backIcon)
+
+    const directoryPath = document.createElement('div')
+    directoryPath.className = 'directory-path'
+    nav.appendChild(directoryPath)
+    this.directoryPath = directoryPath
+
     $target.appendChild(nav)
-
-    this.directoryPath = ['root']
-    this.path = path
     this.render()
   }
 
-  setPath(newPath) {
-    if (newPath.length === 0) {
-      this.directoryPath = ['root']
-    } else {
-      this.directoryPath.push(newPath)
-    }
+  getPathSpan(dir) {
+    const span = document.createElement('span')
+    span.className = `${dir}`
+    span.innerText = dir === 'root' ? dir : '-' + dir
+
+    return span
+  }
+
+  setPath(dir) {
+    this.directoryPath.appendChild(this.getPathSpan(dir))
     this.render()
   }
 
-  render() {
-    this.path.innerText = this.directoryPath.join('-')
-  }
+  render() {}
 }
