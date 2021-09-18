@@ -1,4 +1,5 @@
 import api from '../api/getCatImages.js'
+import Loader from './Loader.js'
 import MainContainer from './MainContainer.js'
 import Nav from './Nav.js'
 
@@ -19,22 +20,28 @@ export default class Album {
   }
 
   async handleIconClick() {
-    const data = await api.fetchRootDirectory()
-    this.mainContainer.setData(data)
     this.nav.setPath('')
+    const loader = new Loader(document.querySelector('.mainContainer'))
+    const data = await api.fetchRootDirectory()
+    loader.closeLoader()
+    this.mainContainer.setData(data)
   }
 
   async getRootImages() {
+    this.mainContainer = new MainContainer(this.album, [], this.handleClick)
+    const loader = new Loader(document.querySelector('.mainContainer'))
     const data = await api.fetchRootDirectory()
-    this.mainContainer = new MainContainer(this.album, data, this.handleClick)
+    loader.closeLoader()
+    this.mainContainer.setData(data)
   }
 
   async handleClick(e, cat) {
     this.nav.setPath(cat.name)
 
     if (cat.type === 'DIRECTORY') {
+      const loader = new Loader(document.querySelector('.mainContainer'))
       const data = await api.fetchDirectory(cat.id)
-      console.log(data)
+      loader.closeLoader()
       this.mainContainer.setData(data)
     } else if (cat.type === 'FILE') {
       const endpoint =

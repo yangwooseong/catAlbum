@@ -96,3 +96,12 @@ body {
   background-color: white;
   width: 100%;
 }
+.loader {
+  width: 100%;
+  display: flex;
+  font-size: 3rem;
+  background-color: aliceblue;
+  height: 20%;
+  justify-content: center;
+  align-items: center;
+}
