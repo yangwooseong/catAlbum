@@ -54,7 +54,7 @@ body {
   position: absolute;
   right: 55px;
 }
-.mainContainer {
+.main-container {
   display: flex;
   flex-direction: row;
   list-style: none;

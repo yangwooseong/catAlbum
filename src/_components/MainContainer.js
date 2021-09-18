@@ -3,15 +3,16 @@ import ImageModal from './ImageModal.js'
 export default class MainContainer {
   constructor($target, cats, handleClick) {
     const mainContainer = document.createElement('div')
-    mainContainer.className = 'mainContainer'
+    mainContainer.className = 'main-container'
     $target.appendChild(mainContainer)
+
     this.cats = cats
     this.mainContainer = mainContainer
     this.handleClick = handleClick
     this.render()
   }
 
-  enumerateCatFolderAndFiles(cats) {
+  enumerateCatFoldersAndFiles(cats) {
     cats.map((cat) => {
       const dir = document.createElement('li')
       const dirImage = document.createElement('button')
@@ -44,6 +45,6 @@ export default class MainContainer {
 
   render() {
     this.mainContainer.innerHTML = ''
-    this.enumerateCatFolderAndFiles(this.cats)
+    this.enumerateCatFoldersAndFiles(this.cats)
   }
 }

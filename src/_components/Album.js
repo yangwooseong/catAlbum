@@ -14,49 +14,35 @@ export default class Album {
     this.handleIconClick = this.handleIconClick.bind(this)
 
     this.nav = new Nav(this.album, this.handleIconClick)
-    this.getRootImages()
 
     this.render()
   }
 
-  async handleIconClick(e) {
+  handleIconClick(e) {
     if (e.target.className === 'home-icon') {
-      this.nav.setPath('root')
-      const loader = new Loader(document.querySelector('.mainContainer'))
-      const data = await api.fetchRootDirectory()
-      loader.closeLoader()
-      this.mainContainer.setData(data)
+      this.nav.resetPath()
+      this.fetchRootDirectoryData()
     } else if (e.target.className === 'back-icon') {
       const directoryPath = document.querySelector('.directory-path')
-      let data
-      const loader = new Loader(document.querySelector('.mainContainer'))
+      const loader = new Loader(document.querySelector('.main-container'))
       if (directoryPath.lastChild.innerText === 'root') {
-        data = await api.fetchRootDirectory()
+        this.fetchRootDirectoryData()
       } else {
         directoryPath.lastChild.remove()
-        data = await api.fetchDirectory(directoryPath.lastChild.id)
+        this.fetchDirectoryOrFileData(directoryPath.lastChild.id)
       }
-      loader.closeLoader()
-      this.mainContainer.setData(data)
     }
   }
 
-  async getRootImages() {
-    this.nav.setPath('root')
+  getRootImages() {
     this.mainContainer = new MainContainer(this.album, [], this.handleClick)
-    const loader = new Loader(document.querySelector('.mainContainer'))
-    const data = await api.fetchRootDirectory()
-    loader.closeLoader()
-    this.mainContainer.setData(data)
+    this.fetchRootDirectoryData()
   }
 
-  async handleClick(e, cat) {
+  handleClick(e, cat) {
     if (cat.type === 'DIRECTORY') {
       this.nav.setPath(cat.name, cat.id)
-      const loader = new Loader(document.querySelector('.mainContainer'))
-      const data = await api.fetchDirectory(cat.id)
-      loader.closeLoader()
-      this.mainContainer.setData(data)
+      this.fetchDirectoryOrFileData(cat.id)
     } else if (cat.type === 'FILE') {
       const endpoint =
         'https://fe-dev-matching-2021-03-serverlessdeploymentbuck-t3kpj3way537.s3.ap-northeast-2.amazonaws.com/public/'
@@ -68,5 +54,21 @@ export default class Album {
     }
   }
 
-  render() {}
+  async fetchRootDirectoryData() {
+    const loader = new Loader(document.querySelector('.main-container'))
+    const data = await api.fetchRootDirectory()
+    loader.closeLoader()
+    this.mainContainer.setData(data)
+  }
+
+  async fetchDirectoryOrFileData(catId) {
+    const loader = new Loader(document.querySelector('.main-container'))
+    const data = await api.fetchDirectory(catId)
+    loader.closeLoader()
+    this.mainContainer.setData(data)
+  }
+
+  render() {
+    this.getRootImages()
+  }
 }

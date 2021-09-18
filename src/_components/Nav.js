@@ -14,6 +14,7 @@ export default class Nav {
     directoryPath.className = 'directory-path'
     nav.appendChild(directoryPath)
     this.directoryPath = directoryPath
+    this.resetPath()
 
     $target.appendChild(nav)
     this.render()
@@ -26,6 +27,11 @@ export default class Nav {
     span.innerText = catName === 'root' ? catName : '-' + catName
 
     return span
+  }
+
+  resetPath() {
+    this.directoryPath.innerHTML = ''
+    this.setPath('root')
   }
 
   setPath(catName, catId = '') {
