@@ -1,5 +1,5 @@
 export default class Nav {
-  constructor($target, handleIconClick) {
+  constructor($target, handleIconClick, handlePathClick) {
     const nav = document.createElement('nav')
     nav.className = 'nav'
 
@@ -17,12 +17,13 @@ export default class Nav {
     this.resetPath()
 
     $target.appendChild(nav)
+    this.handlePathClick = handlePathClick
     this.render()
   }
 
-  getPathSpan(catName, catId) {
+  createPathSpan(catName, catId) {
     const span = document.createElement('span')
-    span.className = `${catName}`
+    span.className = 'path'
     span.id = catId
     span.innerText = catName === 'root' ? catName : '-' + catName
 
@@ -35,7 +36,12 @@ export default class Nav {
   }
 
   setPath(catName, catId = '') {
-    this.directoryPath.appendChild(this.getPathSpan(catName, catId))
+    const span = this.createPathSpan(catName, catId)
+    span.addEventListener('click', (e) => {
+      this.handlePathClick(e)
+    })
+    this.directoryPath.appendChild(span)
+
     this.render()
   }
 

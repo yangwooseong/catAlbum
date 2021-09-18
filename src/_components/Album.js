@@ -10,10 +10,11 @@ export default class Album {
     $target.appendChild(album)
     this.album = album
 
-    this.handleClick = this.handleClick.bind(this)
+    this.handleDirectoryClick = this.handleDirectoryClick.bind(this)
     this.handleIconClick = this.handleIconClick.bind(this)
+    this.handlePathClick = this.handlePathClick.bind(this)
 
-    this.nav = new Nav(this.album, this.handleIconClick)
+    this.nav = new Nav(this.album, this.handleIconClick, this.handlePathClick)
 
     this.render()
   }
@@ -34,12 +35,31 @@ export default class Album {
     }
   }
 
+  handlePathClick(e) {
+    if (e.target.innerText === 'root') {
+      this.fetchRootDirectoryData()
+      this.nav.resetPath()
+    } else {
+      this.fetchDirectoryOrFileData(e.target.id)
+      const directoryPath = document.querySelector('.directory-path')
+      let lastChild = directoryPath.lastChild
+      while (lastChild.id !== e.target.id) {
+        lastChild.remove()
+        lastChild = directoryPath.lastChild
+      }
+    }
+  }
+
   getRootImages() {
-    this.mainContainer = new MainContainer(this.album, [], this.handleClick)
+    this.mainContainer = new MainContainer(
+      this.album,
+      [],
+      this.handleDirectoryClick
+    )
     this.fetchRootDirectoryData()
   }
 
-  handleClick(e, cat) {
+  handleDirectoryClick(e, cat) {
     if (cat.type === 'DIRECTORY') {
       this.nav.setPath(cat.name, cat.id)
       this.fetchDirectoryOrFileData(cat.id)
