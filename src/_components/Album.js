@@ -27,9 +27,17 @@ export default class Album {
       loader.closeLoader()
       this.mainContainer.setData(data)
     } else if (e.target.className === 'back-icon') {
-      // const directoryPath = document.querySelector('.directory-path')
-      // directoryPath
-      console.log('back icon clicked')
+      const directoryPath = document.querySelector('.directory-path')
+      let data
+      const loader = new Loader(document.querySelector('.mainContainer'))
+      if (directoryPath.lastChild.innerText === 'root') {
+        data = await api.fetchRootDirectory()
+      } else {
+        directoryPath.lastChild.remove()
+        data = await api.fetchDirectory(directoryPath.lastChild.id)
+      }
+      loader.closeLoader()
+      this.mainContainer.setData(data)
     }
   }
 
@@ -43,9 +51,8 @@ export default class Album {
   }
 
   async handleClick(e, cat) {
-    this.nav.setPath(cat.name)
-
     if (cat.type === 'DIRECTORY') {
+      this.nav.setPath(cat.name, cat.id)
       const loader = new Loader(document.querySelector('.mainContainer'))
       const data = await api.fetchDirectory(cat.id)
       loader.closeLoader()

@@ -19,16 +19,17 @@ export default class Nav {
     this.render()
   }
 
-  getPathSpan(dir) {
+  getPathSpan(catName, catId) {
     const span = document.createElement('span')
-    span.className = `${dir}`
-    span.innerText = dir === 'root' ? dir : '-' + dir
+    span.className = `${catName}`
+    span.id = catId
+    span.innerText = catName === 'root' ? catName : '-' + catName
 
     return span
   }
 
-  setPath(dir) {
-    this.directoryPath.appendChild(this.getPathSpan(dir))
+  setPath(catName, catId = '') {
+    this.directoryPath.appendChild(this.getPathSpan(catName, catId))
     this.render()
   }
 
