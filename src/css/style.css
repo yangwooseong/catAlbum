@@ -41,6 +41,9 @@ body {
 .directory-path {
   margin-left: 1rem;
 }
+.path {
+  cursor: pointer;
+}
 .home-icon {
   margin-right: 10px;
   padding: 5px;
