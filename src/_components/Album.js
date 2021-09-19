@@ -75,16 +75,33 @@ export default class Album {
 
   async fetchRootDirectoryData() {
     const loader = new Loader(document.querySelector('.main-container'))
-    const data = await api.fetchRootDirectory()
+    const data = this.getCachedData('root') || (await api.fetchRootDirectory())
     loader.closeLoader()
     this.mainContainer.setData(data)
+    this.setCachedData('root', data)
   }
 
   async fetchDirectoryOrFileData(catId) {
+    if (catId === '') catId = 'root'
     const loader = new Loader(document.querySelector('.main-container'))
-    const data = await api.fetchDirectory(catId)
+    const data = this.getCachedData(catId) || (await api.fetchDirectory(catId))
     loader.closeLoader()
     this.mainContainer.setData(data)
+    this.setCachedData(catId, data)
+  }
+
+  getCachedData(catId) {
+    const cachedData = JSON.parse(localStorage.getItem('cache')) || {}
+    return cachedData[catId]
+  }
+
+  setCachedData(catId, data) {
+    const cachedData = JSON.parse(localStorage.getItem('cache')) || {}
+    if (cachedData[catId]) return
+    localStorage.setItem(
+      'cache',
+      JSON.stringify({ ...cachedData, [catId]: data })
+    )
   }
 
   render() {
